@@ -1,0 +1,7 @@
+Update with maximum of boilerplate from node_osm:
+  - template
+  - controller
+  - clientize example code
+  - ...
+
+(This will be the package's TODO)
