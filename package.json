@@ -23,7 +23,6 @@
 		"simple",
 		"minimal"
 	],
-	"private": true,
 	"scripts": {
 		"test": "node test.js"
 	}
