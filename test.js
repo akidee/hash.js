@@ -184,6 +184,22 @@ a.deepEqual(
 )
 
 
+// prototype.valueOf
+
+a.deepEqual(
+	h.valueOf(),
+	h.getData()
+)
+
+
+// prototype.keys
+
+a.deepEqual(
+	h.keys(),
+	[ 'abc', '__proto__', '__parent__', '__count__' ]
+)
+
+
 // prototype.forEach
 
 data = { a: 1, b: 2, c: 3, '__proto__%': 4, hasOwnProperty: 5, __: 6 }

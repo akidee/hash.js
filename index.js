@@ -69,9 +69,23 @@ hash.prototype.forEach = function (/* Function */ iterator, thisArg) {
 	}
 }
 
+hash.prototype.keys = function () {
+
+	var keys = []
+
+	this.forEach(function (value, key) {
+
+		keys.push(key)
+	})
+
+	return keys
+}
+
 hash.prototype.getData = function () {
 
 	return this._data
 }
+
+hash.prototype.valueOf = hash.prototype.getData
 
 hash.prototype.toJSON = hash.prototype.getData
