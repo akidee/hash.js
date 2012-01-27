@@ -3,43 +3,75 @@ var hasOwnProperty = Object.prototype.hasOwnProperty
 
 
 
-var escapeKey = exports.escapeKey = function (key) {
+var hash = module.exports = function (/* Object */ data) {
 
-	if (key.indexOf('__') !== 0)
-		return key
-
-
-	return key + '%'
+	this._data = data || {}
 }
 
-var unescapeKey = exports.unescapeKey = function (key) {
+var escapeKey = hash.escapeKey = function (key) {
 
-	if (key.indexOf('__') !== 0)
-		return key
-	
+	key = ''+key
 
-	return key.substr(0, key.length - 1)
+	// Check if key starts with "__"
+	// http://jsperf.com/check-if-string-starts-with
+	if (key.length > 2 && key.charCodeAt(0) == 95 && key.charCodeAt(1) == 95)
+		return key + '%'
+
+
+	return key
 }
 
-exports.has = function (object, key) {
+var unescapeKey = hash.unescapeKey = function (key) {
 
-	return hasOwnProperty.call(object, escapeKey(key))
+	key = ''+key
+	var length = key.length
+
+	if (length > 2 && key.charCodeAt(0) == 95 && key.charCodeAt(1) == 95)
+		return key.substr(0, length - 1)
+
+
+	return key
 }
 
-exports.set = function (object, key, value) {
+hash.prototype.has = function (key) {
 
-	object[escapeKey(key)] = value
+	return hasOwnProperty.call(this._data, escapeKey(key))
 }
 
-exports.get = function (object, key) {
+hash.prototype.get = function (key) {
 
 	key = escapeKey(key)
-	return hasOwnProperty.call(object, key)
-		? object[key]
+	return hasOwnProperty.call(this._data, key)
+		? this._data[key]
 		: undefined
 }
 
-exports.del = function (object, key) {
+hash.prototype.set = function (key, value) {
 
-	delete object[escapeKey(key)]
+	this._data[escapeKey(key)] = value
 }
+
+hash.prototype.del = function (key) {
+
+	delete this._data[escapeKey(key)]
+}
+
+hash.prototype.forEach = function (/* Function */ iterator, thisArg) {
+
+	var data = this._data,
+		key
+	for (var _key in data) {
+		if (!hasOwnProperty.call(data, _key))
+			continue
+			
+
+		iterator.call(thisArg, data[_key], unescapeKey(_key))
+	}
+}
+
+hash.prototype.getData = function () {
+
+	return this._data
+}
+
+hash.prototype.toJSON = hash.prototype.getData

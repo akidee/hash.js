@@ -1,20 +1,25 @@
-'<srv'
-var a = require('assert')
-'srv>'
-/*<cli
-var a = require('clientassert')
-a.onError(function (e) {
-
-	document.getElementById('error').innerHTML = JSON.stringify(e) + JSON.stringify(e.stack);
-})
-cli>*/
+var a = require('assert'),
+	hash = require('./index'),
+	h,
+	data
 
 
 
 
-var hash = require('./index')
+// (constructor)
 
+data = {}
+h = new hash(data)
+a.strictEqual(
+	h._data,
+	data
+)
 
+h = new hash
+a.notEqual(
+	h._data,
+	data
+)
 
 
 // escapeKey
@@ -32,6 +37,11 @@ a.strictEqual(
 a.strictEqual(
 	hash.escapeKey('__proto__abc'),
 	'__proto__abc%'
+)
+
+a.strictEqual(
+	hash.escapeKey('__'),
+	'__'
 )
 
 
@@ -52,80 +62,158 @@ a.strictEqual(
 	'__proto__abc'
 )
 
+a.strictEqual(
+	hash.unescapeKey('__'),
+	'__'
+)
 
-// has
 
-var o = { a: 1 }
+// prototype.has
+
+h = new hash({ a: 1 })
 
 a.strictEqual(
-	hash.has(o, 'abc'),
+	h.has('abc'),
 	false
 )
 
 a.strictEqual(
-	hash.has(o, 'hasOwnProperty'),
+	h.has('hasOwnProperty'),
 	false
 )
 
 a.strictEqual(
-	hash.has(o, 'a'),
+	h.has('a'),
 	true
 )
 
 
-// set
-
-hash.set(o, 'abc', true),
+// prototype.get
 
 a.strictEqual(
-	'abc' in o,
-	true
-)
-
-hash.set(o, '__proto___', true),
-
-a.strictEqual(
-	hash.has(o, '__proto___'),
-	true
-)
-
-
-// get
-
-a.strictEqual(
-	hash.get(o, '__proto___'),
-	true
-)
-
-a.strictEqual(
-	hash.get(o, '__proto___%'),
+	h.get('abc'),
 	undefined
 )
 
-
-// del
-
-hash.del(o, '__proto___%'),
+a.strictEqual(
+	h.get('hasOwnProperty'),
+	undefined
+)
 
 a.strictEqual(
-	hash.has(o, '__proto___'),
+	h.get('a'),
+	1
+)
+
+
+// prototype.set
+
+h = new hash
+
+h.set('abc', true)
+
+h.set('__proto___', 5)
+
+h.set('__proto__', 1)
+
+h.set('__parent__', 2)
+
+h.set('__count__', 3)
+
+a.strictEqual(
+	h.get('abc'),
 	true
 )
 
-hash.del(o, '__proto___'),
+a.strictEqual(
+	h.get('__proto___'),
+	5
+)
 
 a.strictEqual(
-	hash.has(o, '__proto___'),
+	h.get('__proto___%'),
+	undefined
+)
+
+a.strictEqual(
+	h.get('__proto__'),
+	1
+)
+
+a.strictEqual(
+	h.get('__parent__'),
+	2
+)
+
+a.strictEqual(
+	h.get('__count__'),
+	3
+)
+
+
+// prototype.del
+
+h.del('__proto___%'),
+
+a.strictEqual(
+	h.has('__proto___'),
+	true
+)
+
+h.del('__proto___'),
+
+a.strictEqual(
+	h.has('__proto___'),
 	false
+)
+
+
+// prototype.getData
+
+a.strictEqual(
+	h.getData(),
+	h._data
+)
+
+
+// prototype.toJSON
+
+a.deepEqual(
+	h.toJSON(),
+	h.getData()
+)
+
+
+// prototype.forEach
+
+data = { a: 1, b: 2, c: 3, '__proto__%': 4, hasOwnProperty: 5, __: 6 }
+h = new hash(data)
+var context = {}
+h.forEach(function (v, k) {
+
+	a.strictEqual(
+		this,
+		context
+	)
+
+	k = hash.escapeKey(k)
+
+	a.strictEqual(
+		v,
+		data[k]
+	)
+
+	delete data[k]
+}, context)
+
+a.deepEqual(
+	data,
+	{}
 )
 
 
 
 
 '<srv'
-console.log('Passed')
+console.log('Passed ' + module.id)
 'srv>'
-/*<cli
-document.body.style.backgroundColor = 'green'
-document.body.innerHTML = 'Passed'
-cli>*/

@@ -1,7 +1,7 @@
 {
 	"name": "hash",
-	"version": "0.1.0",
-	"description": "The minimal way to safely use JavaScript objects as hashes",
+	"version": "0.2.0",
+	"description": "Safely use a JavaScript object as hash",
 	"homepage": "https://github.com/akidee/hash.js",
 	"author": {
 		"name": "Andreas Kalsch",
