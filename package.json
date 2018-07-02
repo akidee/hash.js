@@ -1,6 +1,6 @@
 {
 	"name": "hash",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"description": "Safely use a JavaScript object as hash",
 	"homepage": "https://github.com/akidee/hash.js",
 	"author": {
@@ -11,6 +11,7 @@
 	"engine" : {
 		"node": "0"
 	},
+	"license" : "MIT",
 	"dependencies": {},
 	"devDependencies": {},
 	"keywords": [
