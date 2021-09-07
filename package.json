@@ -8,6 +8,10 @@
 		"email": "mail@akidee.de",
 		"url": "http://akidee.de/"
 	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/akidee/hash.js.git"
+	},
 	"engine" : {
 		"node": "0"
 	},
